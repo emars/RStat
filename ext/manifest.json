@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "RStat",
+  "description": "Reddit Statistics collecter for rstat.emaf.ca",
+  "version":"0.1",
+  "permissions": [
+    "http://rstat.emaf.ca"
+  ],
+  "content_scripts":[
+    {
+      "matches": ["http://www.reddit.com/*"],
+      "js": ["main.js"]
+    }
+  ]
+}
