@@ -1,7 +1,13 @@
 var express = require('express');
 var app = express();
 var multer  = require('multer')
+var cors = require('express-cors');
 app.use(multer({ dest: './uploads/'}));
+app.use(cors({
+  allowedOrigins: [
+    'reddit.com'
+  ]
+}));
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/rstat');
