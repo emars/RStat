@@ -34,22 +34,44 @@ app.post('/link', function(req, res){
   var username = req.body.username;
   if (! username || ! data){
     res.send(400);
+    return;
   }
 
   RStat.findOne({name: username}, function(err, rstat){
     if (err){
       console.log(err);
       res.send(500);
+      return;
     } else {
+      if (! rstat){
+        RStat.create({ name:username }, function(err, rstat){
+          if (err){
+
+          } else {
+            rstat.links++;
+            rstat.save(function(err){
+              if(err){
+
+              } else {
+                res.send(200);
+                return;
+              }
+            });
+          }
+        });
+      } else {
       rstat.links++;
       rstat.save(function(err){
         if (err){
           console.log(err);
           res.send(500);
+          return;
         } else {
           res.send(200);
+          return;
         }
       });
+    }
     }
   });
   //res.send('Not implemented.<br>This will take your data and parse it');

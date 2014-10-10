@@ -1,4 +1,4 @@
-
+var username = document.querySelector('span.user a').innerHTML;
 var elements = document.querySelectorAll('a.title');
 
 for(var i = 0; i < elements.length; i++){
@@ -7,15 +7,5 @@ for(var i = 0; i < elements.length; i++){
 }
 
 function clickHandler(e){
-  
+
 }
-
-
-
-/*
-$('a.title').each(function(element){
-  $(element).click(function(e){
-    console.log(this);
-  });
-});
-*/
