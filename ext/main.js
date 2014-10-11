@@ -44,3 +44,11 @@ var testData = {
 $.post(URL, testData, function(){
   console.log('I think it werked');
 });
+
+$('a.title').each(function(index,el){
+  console.log(el);
+  $(el).click(function(e){
+    e.preventDefault();
+    console.log('no link 4 u');
+  });
+});

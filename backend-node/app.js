@@ -2,12 +2,21 @@ var express = require('express');
 var app = express();
 var multer  = require('multer')
 var cors = require('express-cors');
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    }
+    else {
+      next();
+    }
+};
 app.use(multer({ dest: './uploads/'}));
-app.use(cors({
-  allowedOrigins: [
-    'reddit.com'
-  ]
-}));
+app.use(allowCrossDomain);
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/rstat');
