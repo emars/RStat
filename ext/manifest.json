@@ -4,7 +4,8 @@
   "description": "Reddit Statistics collecter for rstat.emaf.ca",
   "version":"0.1",
   "permissions": [
-    "http://rstat.emaf.ca"
+    "http://rstat.emaf.ca",
+    "storage"
   ],
   "content_scripts":[
     {

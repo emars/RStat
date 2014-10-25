@@ -1,54 +1,44 @@
-/* PURE JS */
-/*
-var username = document.querySelector('span.user a').innerHTML;
-var URL = 'http://rstat.emaf.ca/link';
-
-init(username);
-
-function init(username){
-    if (! username){
-      return console.log('you must be logged in to reddit to use rstat');
-    }
-
-    var elements = document.querySelectorAll('a.title');
-
-    for(var i = 0; i < elements.length; i++){
-      var element = elements[i];
-      element.onclick = clickHandler;
-    }
-
-
-    function stateChange(){
-      console.log(req.status);
-    }
-
-    function clickHandler(e){
-      console.log('firing request');
-      var req = new XMLHttpRequest();
-      req.onreadystatechange = stateChange;
-      req.open('POST')
-      req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      req.send('username='+encodeURIComponent(username)+'data='+encodeURIComponent('nice'));
-    }
-
-}
-*/
-
+(function(){
 /* JQUERY */
-var username = $('span.user a').text();
-var URL = 'http://rstat.emaf.ca/link';
-var testData = {
-  username: username,
-  data: 'lel'
-};
-$.post(URL, testData, function(){
-  console.log('I think it werked');
-});
+var username = $('span.user a').first().text();
+if (username == 'login or register'){
+  return console.log("RStat Message: You must be Logged in to use RStat");
+}
+  console.log("RStat Message: Logged in as user "+username);
+  var ROOT_URL = 'http://rstat.emaf.ca/link';
+  var formData = new FormData();
+  formData.append('username', username);
 
-$('a.title').each(function(index,el){
-  console.log(el);
-  $(el).click(function(e){
-    e.preventDefault();
-    console.log('no link 4 u');
+  $('a.title').each(function(index,el){
+    attachListener(el);
   });
-});
+
+    function attachListener(el){
+      $(el).click(function(e){
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append('uname', username);
+        var subReddit = getSubreddit();
+        subReddit = subReddit || 'front';
+        formData.append('subreddit', subReddit);
+        sendLinkAjax(function(data){
+          window.location.href = $(el).attr("href");
+        });
+      });
+    }
+
+    function sendLinkAjax(cb){
+      $.ajax(ROOT_URL, {
+        success: cb,
+        contentType: false,
+        cache: false,
+        processData: false,
+        data: formData,
+        type: 'POST'
+      });
+    }
+
+    function getSubreddit(){
+      return window.location.pathname.split('/')[2];
+    }
+}());

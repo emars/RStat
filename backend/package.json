@@ -1,0 +1,23 @@
+{
+  "name": "RStat-Backend",
+  "version": "0.0.1",
+  "description": "Backend for rstat app rstat.emaf.ca",
+  "main": "rstat.js",
+  "scripts": {
+    "test": "node rstat.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/emars/rstat.git"
+  },
+  "author": "Evan Marsland",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emars/rstat/issues"
+  },
+  "homepage": "https://github.com/emars/rstat",
+  "dependencies": {
+    "cors": "^2.5.0",
+    "express": "^4.10.0"
+  }
+}
