@@ -8,7 +8,7 @@ var express = require('express')
   , fs = require('fs')
   , clientID = "nIS4-j1J1nO82A"
   , redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8').replace('\n','')
-  , redditAuthUrl = "https://ssl.reddit.com/api/v1/authorize?client_id=nIS4-j1J1nO82A&response_type=code&state=boners&redirect_uri=http://rstat.emaf.ca/me&duration=temporary&scope=flair"
+  , redditAuthUrl = "https://ssl.reddit.com/api/v1/authorize?client_id=nIS4-j1J1nO82A&response_type=code&state=boners&redirect_uri=http://rstat.emaf.ca/me&duration=temporary&scope=identity"
   , request = require('request');
   //, auth = "Basic " + new Buffer(clientID + ":" + redditSecret).toString("base64");
 
@@ -39,7 +39,7 @@ app.get('/me', function(req, res){
       var token = JSON.parse(body).access_token;
       var authString = 'bearer '+token;
       console.log(authString);
-      request.get('https://oauth.reddit.com/api/v1/me', {
+      request.get('https://oauth.reddit.com/api/v1/me.json', {
         headers:{
           'Authorization':authString,
           'User-Agent': 'RStat Client 0.1'
