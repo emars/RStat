@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ME - RStat</title>
+    <link rel="stylesheet" href="/styles/bootstrap.css" />
+    <link rel="stylesheet" href="/styles/flat-ui.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h3 class="text-center">My RStats</h3>
+      <p id="loading" class="text-center">loading...</p>
+    </div>
+    <script src="/scripts/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $.get('/data', function(data){
+          var json = JSON.parse(data);
+          console.log(json);
+        });
+      });
+    </script>
+  </body>
+</html>

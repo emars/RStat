@@ -7,7 +7,7 @@ if (username == 'login or register'){
   console.log("RStat Message: Logged in as user "+username);
   var ROOT_URL = 'http://rstat.emaf.ca/link';
   var formData = new FormData();
-  formData.append('username', username);
+  formData.append('uname', username);
 
   $('a.title').each(function(index,el){
     attachListener(el);
