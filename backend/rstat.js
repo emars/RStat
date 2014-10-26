@@ -33,7 +33,7 @@ app.get('/me', function(req, res){
     var opts = {
       uri:'https://ssl.reddit.com/api/v1/access_token',
       headers:{
-        'Authorization':'Basic '+new Buffer(clientID + ":" + redditSecret).toString("base64");
+        'Authorization':'Basic '+new Buffer(clientID + ":" + redditSecret).toString("base64")
       }
     };
 
