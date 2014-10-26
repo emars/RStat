@@ -42,6 +42,8 @@ app.get('/me', function(req, res){
           'Authorization':'bearer '+token
         }
       }, function(err, response, body){
+          console.log(err);
+          console.log(response);
           console.log(body);
           res.send(body);
       });
