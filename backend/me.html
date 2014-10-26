@@ -149,6 +149,7 @@
 
       function getHourlyLabels(){
         var labels = [];
+<<<<<<< HEAD
         var offset = moment().minute() % 5;
         var firstTime = moment().subtract(offset,'minutes');
         labels.push(firstTime.format('hh:mm'));
@@ -174,6 +175,8 @@
           firstTime.subtract(5,'minutes');
         }
         return datum;
+=======
+>>>>>>> b4a2be4... nicenicenice
       }
     </script>
   </body>
