@@ -33,7 +33,7 @@ app.get('/me', function(req, res){
       grant_type:'authorization', code:code, redirect_uri:"http://rstat.emaf.ca/me"
     }).auth(clientID, redditSecret).on('response', function(data){
       console.log(data);
-      res.send(200);
+      res.json(data);
     })
   }else if (! req.session.uname){
     return res.redirect(redditAuthUrl);
