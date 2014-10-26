@@ -5,10 +5,10 @@ var express = require('express')
   , r = require('rethinkdb')
   , session = require('express-session')
   , connection = null
-  , fs = require('fs');
-
-
-var redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8');
+  , fs = require('fs')
+  , redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8')
+  , redditAuthUrl = "https://ssl.reddit.com/api/v1/authorize?client_id=nIS4-j1J1nO82A&response_type=code&state=boners&redirect_uri=http://rstat.emaf.ca/me&duration=temporary&scope=flair"
+  , request = require('request');
 
 r.connect({host:'localhost', port:28015, db:'rstat'}, function(err, conn){
   if (err) throw err;
@@ -25,7 +25,19 @@ app.get('/', function(req, res){
 });
 
 app.get('/me', function(req, res){
-  res.sendFile(__dirname+'/me.html');
+  var code = req.param('code', '');
+  if (code != ''){
+    request.post('https://ssl.reddit.com/api/v1/access_token',
+    {grant_type:'authorization', code:code, redirect_uri="http://rstat.emaf.ca/me"},
+    function(data){
+      console.log(data);
+      res.send(200);
+    });
+  }else if (! req.session.uname){
+    return res.redirect(redditAuthUrl);
+  } else {
+      res.sendFile(__dirname+'/me.html');
+  }
 });
 
 app.get('/data', function(req, res){

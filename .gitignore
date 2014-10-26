@@ -1,3 +1,4 @@
 rethinkdb_data
 .DS_store
 node_modules
+backend/reddit_secret
