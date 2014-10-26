@@ -107,7 +107,7 @@ function link(uname, res){
     r.table('stats')
       .get(uname)
       .update({links: r.row('links').add(1),
-      timestamps: r.row('timestamps').append(+new Date())})
+      timestamps: r.row('timestamps').prepend(+new Date())})
       .run(connection, function(err, cb){
         if (err) throw err;
         res.send(200);

@@ -24,11 +24,22 @@
         var myChart = new Chart(ctx);
         $.get('/data', function(data){
           test = data;
+          var times = data.timestamps;
           $('#loading').hide();
           $('#datum').show();
           $('#links').text(data.links);
+          console.log(getWeeklyLabels(times));
         });
       });
+
+      function getWeeklyLabels(timestamps){
+        var labels = [];
+        var firstDay = moment(timestamps[0]);
+        for(var i = 0; i < 7; i++){
+          labels.push(firstDay.subtract(i, 'days').format('dddd'));
+        }
+        return labels;
+      }
     </script>
   </body>
 </html>
