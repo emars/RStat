@@ -36,9 +36,15 @@ app.get('/me', function(req, res){
       },
       form:{ grant_type:'authorization_code', code:code, redirect_uri:"http://rstat.emaf.ca/me"}
     }, function(err, response, body){
-      var data = JSON.parse(body);
-      console.log(data.access_token);
-      res.json(data);
+      var token = JSON.parse(body).access_token;
+      request.get('oauth.reddit.com/api/me.json', {
+        headers:{
+          'Authorization':'bearer '+token
+        }
+      }, function(err, response, body){
+          console.log(body);
+          res.send(body);
+      });
     });
   }else if (! req.session.uname){
     return res.redirect(redditAuthUrl);
