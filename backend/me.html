@@ -29,16 +29,24 @@
           $('#datum').show();
           $('#links').text(data.links);
           console.log(getWeeklyLabels(times));
+          console.log(getHourlyLabels(times));
         });
       });
 
       function getWeeklyLabels(timestamps){
         var labels = [];
         var firstDay = moment(timestamps[0]);
-        for(var i = 0; i < 7; i++){
+        labels.push(firstDay.format('dddd'));
+        for(var i = 0; i < 6; i++){
           labels.push(firstDay.subtract(1, 'days').format('dddd'));
         }
         return labels;
+      }
+
+      function getHourlyLabels(timestamps){
+        var labels = [];
+        var firstHour = moment(timestamps[0]).format('hh');
+        return firstHour;
       }
     </script>
   </body>
