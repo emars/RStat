@@ -36,7 +36,7 @@
         var labels = [];
         var firstDay = moment(timestamps[0]);
         for(var i = 0; i < 7; i++){
-          labels.push(firstDay.subtract(i, 'days').format('dddd'));
+          labels.push(firstDay.subtract(1, 'days').format('dddd'));
         }
         return labels;
       }
