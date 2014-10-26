@@ -24,6 +24,15 @@ app.get('/me', function(req, res){
   res.sendFile(__dirname+'/me.html');
 });
 
+app.get('/data', function(req, res){
+  var uname = req.param('uname','');
+  if (! uname) return res.send(400);
+  r.table('stats').get(uname).run(connection, function(err, doc){
+    if (err) throw err;
+    res.json(doc);
+  });
+});
+
 app.post('/link',cors(),function(req, res){
   if (! connection){
     res.send(500);
@@ -36,6 +45,7 @@ app.post('/link',cors(),function(req, res){
       r.table('stats')
         .get(uname)
         .run(connection, function(err, doc){
+          if (err) throw err;
           if (! doc){
             r.table('stats')
               .insert({id:uname, links:0, timestamps:[]})
