@@ -45,9 +45,9 @@ app.get('/me', function(req, res){
           'User-Agent': 'RStat Client 0.1'
         }
       }, function(err, response, body){
-          console.log(err);
-          console.log(response);
-          console.log(body);
+          //console.log(err);
+          //console.log(response);
+          //console.log(body);
           res.send(body);
       });
     });
