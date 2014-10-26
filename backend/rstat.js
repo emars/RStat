@@ -4,8 +4,11 @@ var express = require('express')
   , app = express()
   , r = require('rethinkdb')
   , session = require('express-session')
-  , connection = null;
+  , connection = null
+  , fs = require('fs');
 
+
+var redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8');
 
 r.connect({host:'localhost', port:28015, db:'rstat'}, function(err, conn){
   if (err) throw err;
@@ -35,7 +38,7 @@ app.get('/data', function(req, res){
 });
 
 app.post('/auth', function(req, res){
-  
+
 });
 
 app.post('/link',cors(),function(req, res){
