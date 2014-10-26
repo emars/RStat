@@ -9,12 +9,21 @@
     <div class="container">
       <h3 class="text-center">My RStats</h3>
       <p id="loading" class="text-center">loading...</p>
+      <div id="datum" style="display:none;">
+      <p>Total Links Clicked: <span id="links"></span></p>
+      <canvas width="400" height="400" id="chart">ur computer isn't gud enuf for rstat</canvas>
+    </div>
     </div>
     <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/Chart.min.js"></script>
     <script>
       $(document).ready(function(){
+        var ctx = document.getElementById('chart').getContext('2d');
+        var myChart = new Chart(ctx);
         $.get('/data', function(data){
-          console.log(data);
+          $('#loading').hide();
+          $('#datum').show();
+          $('#links').text(data.links);
         });
       });
     </script>
