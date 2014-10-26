@@ -10,21 +10,33 @@ if (username == 'login or register'){
   formData.append('uname', username);
 
   $('a.title').each(function(index,el){
-    attachListener(el);
+    attachListener(el, true);
+  });
+  $('a.toggleImage').each(function(index,el){
+    attachListener(el, false);
   });
 
-    function attachListener(el){
-      $(el).click(function(e){
-        e.preventDefault();
+    function attachListener(el, prevDefault){
+      var listener = function(e){
+        if (prevDefault){
+            e.preventDefault();
+        } else {
+          $(el).off();
+        }
         var formData = new FormData();
         formData.append('uname', username);
         var subReddit = getSubreddit();
         subReddit = subReddit || 'front';
         formData.append('subreddit', subReddit);
         sendLinkAjax(function(data){
-          window.location.href = $(el).attr("href");
+          console.log(data);
+          if (prevDefault){
+              window.location.href = $(el).attr("href");
+          }
         });
-      });
+      };
+
+      $(el).click(listener);
     }
 
     function sendLinkAjax(cb){

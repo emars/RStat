@@ -16,11 +16,14 @@
     </div>
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/Chart.min.js"></script>
+    <script src="/scripts/moment.js"></script>
     <script>
+    var test;
       $(document).ready(function(){
         var ctx = document.getElementById('chart').getContext('2d');
         var myChart = new Chart(ctx);
         $.get('/data', function(data){
+          test = data;
           $('#loading').hide();
           $('#datum').show();
           $('#links').text(data.links);
