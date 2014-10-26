@@ -10,7 +10,12 @@ var express = require('express')
   , redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8').replace('\n','')
   , redditAuthUrl = "https://ssl.reddit.com/api/v1/authorize?client_id=nIS4-j1J1nO82A&response_type=code&state=boners&redirect_uri=http://rstat.emaf.ca/me&duration=temporary&scope=identity"
   , request = require('request');
-  //, auth = "Basic " + new Buffer(clientID + ":" + redditSecret).toString("base64");
+
+
+var config = {
+  env: 'dev'
+};
+
 
 r.connect({host:'localhost', port:28015, db:'rstat'}, function(err, conn){
   if (err) throw err;
@@ -27,6 +32,9 @@ app.get('/', function(req, res){
 });
 
 app.get('/me', function(req, res){
+  if (config.env == 'dev'){
+    res.sendFile(__dirname+'/me.html');
+  } else {
   var code = req.param('code', '');
   if (code != ''){
     request.post('https://ssl.reddit.com/api/v1/access_token', {
@@ -55,16 +63,24 @@ app.get('/me', function(req, res){
     return res.redirect(redditAuthUrl);
   } else {
       res.sendFile(__dirname+'/me.html');
+    }
   }
 });
 
 app.get('/data', function(req, res){
+  if (config.env == 'dev'){
+    r.table('stats').get('_dazappa').run(connection, function(err, doc){
+      if (err) throw err;
+      res.json(doc);
+    });
+  } else {
   var uname = req.session.uname;
   if (! uname) return res.send(403);
   r.table('stats').get(uname).run(connection, function(err, doc){
     if (err) throw err;
     res.json(doc);
   });
+  }
 });
 
 app.post('/auth', function(req, res){
@@ -76,7 +92,6 @@ app.post('/link',cors(),function(req, res){
     res.send(500);
   } else {
     var uname = req.body.uname;
-    //var subreddit = req.body.subreddit;
     if (! uname) {
       res.send(400);
     } else {

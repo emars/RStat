@@ -4,49 +4,176 @@
     <title>ME - RStat</title>
     <link rel="stylesheet" href="/styles/bootstrap.css" />
     <link rel="stylesheet" href="/styles/flat-ui.css" />
+    <link rel="stylesheet" href="/styles/main.css" />
   </head>
   <body>
     <div class="container">
       <h3 class="text-center">My RStats</h3>
       <p id="loading" class="text-center">loading...</p>
       <div id="datum" style="display:none;">
-      <p>Total Links Clicked: <span id="links"></span></p>
-      <canvas width="400" height="400" id="chart">ur computer isn't gud enuf for rstat</canvas>
+        <div class="text-center">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary active" id="hourly">
+    <input type="radio" name="options" checked>Hourly
+  </label>
+  <label class="btn btn-primary"  id="daily">
+    <input type="radio" name="options">Daily
+  </label>
+  <label class="btn btn-primary" id="weekly">
+    <input type="radio" name="options" >Weekly
+  </label>
+          </div>
+        </div>
+      <p class="text-center">Total Links Clicked: <span id="links"></span></p>
+      <h6 class="text-center" id="title">Links Clicked in the Past <span id="unit">Hour</span></h6>
+      <div id="chart-container">
+      <canvas width="600" height="400" id="chart">ur computer isn't gud enuf for rstat</canvas>
+      </div>
     </div>
     </div>
     <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/bootstrap.js"></script>
     <script src="/scripts/Chart.min.js"></script>
     <script src="/scripts/moment.js"></script>
     <script>
     var test;
       $(document).ready(function(){
-        var ctx = document.getElementById('chart').getContext('2d');
-        var myChart = new Chart(ctx);
         $.get('/data', function(data){
           test = data;
-          var times = data.timestamps;
+          var timestamps = data.timestamps;
+          console.log(getDailyData(timestamps));
+          renderChart(getHourlyLabels, getHourlyData, timestamps);
+          console.log(chart);
           $('#loading').hide();
           $('#datum').show();
           $('#links').text(data.links);
-          console.log(getWeeklyLabels(times));
-          console.log(getHourlyLabels(times));
+          $('#hourly').click(function(){
+            console.log('hourly');
+            $('#unit').text('Hour');
+            renderChart(getHourlyLabels, getHourlyData, timestamps);
+          });
+          $('#daily').click(function(){
+            $('#unit').text('Day');
+            renderChart(getDailyLabels, getDailyData, timestamps);
+          });
+          $('#weekly').click(function(){
+            $('#unit').text('Week');
+            renderChart(getWeeklyLabels, getWeeklyData, timestamps);
+          });
         });
       });
 
+      function initChart(){
+        var ctx = document.getElementById('chart').getContext('2d');
+        return new Chart(ctx);
+      }
+
+      function remakeCanvas(){
+        $('#chart').remove();
+        $('#chart-container').append('<canvas id="chart" width="600" height="400"></canvas>');
+      }
+
+      function renderChart(labelfn, datafn, times){
+        remakeCanvas();
+        var chart = initChart();
+        var data = {
+          labels: labelfn(times),
+          datasets: [{
+            label: "Links",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: datafn(times)
+          }]
+        };
+        chart.Line(data);
+      }
+
       function getWeeklyLabels(timestamps){
         var labels = [];
-        var firstDay = moment(timestamps[0]);
+        var firstDay = moment();
         labels.push(firstDay.format('dddd'));
         for(var i = 0; i < 6; i++){
-          labels.push(firstDay.subtract(1, 'days').format('dddd'));
+          labels.unshift(firstDay.subtract(1, 'days').format('dddd'));
         }
         return labels;
       }
 
-      function getHourlyLabels(timestamps){
+      function getWeeklyData(timestamps){
+        var datum = [];
+        var currentDay = moment(timestamps[0]).day();
+        console.log(currentDay);
+        var index = 0;
+        var currentDatum;
+        for(var i = 0; i < 7; i++){
+          currentDatum = 0;
+          while(currentDay == moment(timestamps[index]).day() && index < timestamps.length){
+            console.log(moment(timestamps[index]).day());
+            currentDatum++;
+            index++;
+          }
+          datum.unshift(currentDatum);
+        }
+        return datum;
+      }
+
+      function getDailyLabels(){
         var labels = [];
-        var firstHour = moment(timestamps[0]).format('hh');
-        return firstHour;
+        var firstTime = moment().startOf('hour');
+        for (var i = 0; i < 24; i++){
+          labels.unshift(firstTime.format('hh:mm'));
+          firstTime.subtract(1, 'hours');
+        }
+        return labels;
+      }
+
+      function getDailyData(timestamps){
+        var datum = [];
+        var firstTime = moment().startOf('hour');
+        var currentDatum;
+        var index = 0;
+        for(var i = 0; i < 24; i++){
+          currentDatum = 0;
+          while(firstTime < moment(timestamps[index]) && index < timestamps.length){
+            currentDatum++;
+            index++;
+          }
+          datum.unshift(currentDatum);
+          firstTime.subtract(1, 'hour');
+        }
+        return datum;
+      }
+
+      function getHourlyLabels(){
+        var labels = [];
+        var offset = moment().minute() % 5;
+        var firstTime = moment().subtract(offset,'minutes');
+        labels.push(firstTime.format('hh:mm'));
+        for (var i = 0; i < 11; i++){
+          labels.unshift(firstTime.subtract(5, 'minutes').format('hh:mm'));
+        }
+        return labels;
+      }
+
+      function getHourlyData(timestamps){
+        var datum = [];
+        var offset = moment().minute() % 5;
+        var firstTime = moment().subtract(offset, 'minutes');
+        var currentDatum;
+        var index = 0;
+        for(var i = 0; i < 12; i++){
+          currentDatum = 0;
+          while(firstTime < moment(timestamps[index]) && index < timestamps.length){
+            currentDatum++;
+            index++;
+          }
+          datum.unshift(currentDatum);
+          firstTime.subtract(5,'minutes');
+        }
+        return datum;
       }
     </script>
   </body>
