@@ -39,7 +39,8 @@ app.get('/me', function(req, res){
       var token = JSON.parse(body).access_token;
       request.get('http://oauth.reddit.com/api/me.json', {
         headers:{
-          'Authorization':'bearer '+token
+          'Authorization':'bearer '+token,
+          'User-Agent': 'RStat Client 0.1'
         }
       }, function(err, response, body){
           console.log(err);
