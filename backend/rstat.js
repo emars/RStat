@@ -37,7 +37,7 @@ app.get('/me', function(req, res){
       form:{ grant_type:'authorization_code', code:code, redirect_uri:"http://rstat.emaf.ca/me"}
     }, function(err, response, body){
       var token = JSON.parse(body).access_token;
-      request.get('http://oauth.reddit.com/api/me.json', {
+      request.get('https://oauth.reddit.com/api/me.json', {
         headers:{
           'Authorization':'bearer '+token,
           'User-Agent': 'RStat Client 0.1'
