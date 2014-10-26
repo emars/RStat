@@ -34,7 +34,7 @@ app.get('/me', function(req, res){
         user: clientID,
         pass: redditSecret
       },
-      form:{ grant_type:'authorization', code:code, redirect_uri:"http://rstat.emaf.ca/me"}
+      form:{ grant_type:'authorization_code', code:code, redirect_uri:"http://rstat.emaf.ca/me"}
     }, function(err, resopnse, body){
       console.log(body);
       res.json(body);
