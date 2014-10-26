@@ -7,7 +7,7 @@ var express = require('express')
   , connection = null
   , fs = require('fs')
   , clientID = "nIS4-j1J1nO82A"
-  , redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8')
+  , redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8').replace('\n','')
   , redditAuthUrl = "https://ssl.reddit.com/api/v1/authorize?client_id=nIS4-j1J1nO82A&response_type=code&state=boners&redirect_uri=http://rstat.emaf.ca/me&duration=temporary&scope=flair"
   , request = require('request');
   //, auth = "Basic " + new Buffer(clientID + ":" + redditSecret).toString("base64");
