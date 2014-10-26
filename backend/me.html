@@ -40,7 +40,6 @@
       $(document).ready(function(){
 <<<<<<< HEAD
 =======
-        var ctx = document.getElementById('chart').getContext('2d');
 >>>>>>> e3b9bf4... nicenicenice
         $.get('/data', function(data){
           test = data;
@@ -113,18 +112,25 @@
         var datum = [];
         var currentDay = moment(timestamps[0]).day();
 <<<<<<< HEAD
+<<<<<<< HEAD
         console.log(currentDay);
 =======
 >>>>>>> e3b9bf4... nicenicenice
+=======
+        console.log(currentDay);
+>>>>>>> 3cff753... nicenicenice
         var index = 0;
         var currentDatum;
         for(var i = 0; i < 7; i++){
           currentDatum = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
           while(currentDay == moment(timestamps[index]).day() && index < timestamps.length){
             console.log(moment(timestamps[index]).day());
 =======
 >>>>>>> e3b9bf4... nicenicenice
+=======
+>>>>>>> 3cff753... nicenicenice
             currentDatum++;
             index++;
           }
