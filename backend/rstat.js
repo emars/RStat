@@ -3,7 +3,7 @@ var express = require('express')
   , multer = require('multer')
   , app = express()
   , r = require('rethinkdb')
-  , q = require('q')
+  , session = require('express-session')
   , connection = null;
 
 
@@ -15,6 +15,7 @@ r.connect({host:'localhost', port:28015, db:'rstat'}, function(err, conn){
 
 app.use(express.static(__dirname+'/assets'));
 app.use(multer());
+app.use(session({secret: 'somethingrstat'}))
 
 app.get('/', function(req, res){
   res.sendFile(__dirname+'/index.html');
@@ -31,6 +32,10 @@ app.get('/data', function(req, res){
     if (err) throw err;
     res.json(doc);
   });
+});
+
+app.post('/auth', function(req, res){
+  
 });
 
 app.post('/link',cors(),function(req, res){
