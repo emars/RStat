@@ -6,9 +6,11 @@ var express = require('express')
   , session = require('express-session')
   , connection = null
   , fs = require('fs')
+  , clientID = "nIS4-j1J1nO82A"
   , redditSecret = fs.readFileSync(__dirname+'/reddit_secret', 'utf8')
   , redditAuthUrl = "https://ssl.reddit.com/api/v1/authorize?client_id=nIS4-j1J1nO82A&response_type=code&state=boners&redirect_uri=http://rstat.emaf.ca/me&duration=temporary&scope=flair"
   , request = require('request');
+  //, auth = "Basic " + new Buffer(clientID + ":" + redditSecret).toString("base64");
 
 r.connect({host:'localhost', port:28015, db:'rstat'}, function(err, conn){
   if (err) throw err;
@@ -27,12 +29,12 @@ app.get('/', function(req, res){
 app.get('/me', function(req, res){
   var code = req.param('code', '');
   if (code != ''){
-    request.post('https://ssl.reddit.com/api/v1/access_token',
-    {grant_type:'authorization', code:code, redirect_uri:"http://rstat.emaf.ca/me"},
-    function(data){
+    request.post('https://ssl.reddit.com/api/v1/access_token', {
+      grant_type:'authorization', code:code, redirect_uri:"http://rstat.emaf.ca/me"
+    }).auth(clientID, redditSecret).on('response', function(data){
       console.log(data);
       res.send(200);
-    });
+    })
   }else if (! req.session.uname){
     return res.redirect(redditAuthUrl);
   } else {
