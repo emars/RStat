@@ -38,6 +38,10 @@
     <script>
     var test;
       $(document).ready(function(){
+<<<<<<< HEAD
+=======
+        var ctx = document.getElementById('chart').getContext('2d');
+>>>>>>> e3b9bf4... nicenicenice
         $.get('/data', function(data){
           test = data;
           var timestamps = data.timestamps;
@@ -47,6 +51,7 @@
           $('#loading').hide();
           $('#datum').show();
           $('#links').text(data.links);
+<<<<<<< HEAD
           $('#hourly').click(function(){
             console.log('hourly');
             $('#unit').text('Hour');
@@ -60,6 +65,8 @@
             $('#unit').text('Week');
             renderChart(getWeeklyLabels, getWeeklyData, timestamps);
           });
+=======
+>>>>>>> e3b9bf4... nicenicenice
         });
       });
 
@@ -105,13 +112,19 @@
       function getWeeklyData(timestamps){
         var datum = [];
         var currentDay = moment(timestamps[0]).day();
+<<<<<<< HEAD
         console.log(currentDay);
+=======
+>>>>>>> e3b9bf4... nicenicenice
         var index = 0;
         var currentDatum;
         for(var i = 0; i < 7; i++){
           currentDatum = 0;
+<<<<<<< HEAD
           while(currentDay == moment(timestamps[index]).day() && index < timestamps.length){
             console.log(moment(timestamps[index]).day());
+=======
+>>>>>>> e3b9bf4... nicenicenice
             currentDatum++;
             index++;
           }
@@ -120,12 +133,18 @@
         return datum;
       }
 
+<<<<<<< HEAD
       function getDailyLabels(){
+=======
+>>>>>>> e3b9bf4... nicenicenice
         var labels = [];
         var firstTime = moment().startOf('hour');
         for (var i = 0; i < 24; i++){
+<<<<<<< HEAD
           labels.unshift(firstTime.format('hh:mm'));
           firstTime.subtract(1, 'hours');
+=======
+>>>>>>> e3b9bf4... nicenicenice
         }
         return labels;
       }
@@ -179,7 +198,6 @@
 =======
 >>>>>>> b4a2be4... nicenicenice
 =======
-
 >>>>>>> f58cdf6... nicenicenice
       }
     </script>
