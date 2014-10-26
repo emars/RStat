@@ -28,7 +28,7 @@ app.get('/me', function(req, res){
   var code = req.param('code', '');
   if (code != ''){
     request.post('https://ssl.reddit.com/api/v1/access_token',
-    {grant_type:'authorization', code:code, redirect_uri="http://rstat.emaf.ca/me"},
+    {grant_type:'authorization', code:code, redirect_uri:"http://rstat.emaf.ca/me"},
     function(data){
       console.log(data);
       res.send(200);
