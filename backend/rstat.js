@@ -45,10 +45,10 @@ app.get('/me', function(req, res){
           'User-Agent': 'RStat Client 0.1'
         }
       }, function(err, response, body){
-          //console.log(err);
-          //console.log(response);
-          //console.log(body);
-          res.send(body);
+          if (err) throw err;
+          var meResponse = JSON.parse(body);
+          req.session.uname = meResponse.name;
+          res.redirect('/me');
       });
     });
   }else if (! req.session.uname){
@@ -59,8 +59,8 @@ app.get('/me', function(req, res){
 });
 
 app.get('/data', function(req, res){
-  var uname = req.param('uname','');
-  if (! uname) return res.send(400);
+  var uname = req.session.uname;
+  if (! uname) return res.send(403);
   r.table('stats').get(uname).run(connection, function(err, doc){
     if (err) throw err;
     res.json(doc);
