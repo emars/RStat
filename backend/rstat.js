@@ -29,16 +29,20 @@ app.get('/', function(req, res){
 app.get('/me', function(req, res){
   var code = req.param('code', '');
   if (code != ''){
-    request.post('https://ssl.reddit.com/api/v1/access_token', {
-      'auth':{
-        'user': clientID,
-        'pass': redditSecret
-      },
+
+    var opts = {
+      uri:'https://ssl.reddit.com/api/v1/access_token',
+      headers:{
+        'Authorization':'Basic '+new Buffer(clientID + ":" + redditSecret).toString("base64");
+      }
+    };
+
+    request.post(opts, {
       grant_type:'authorization', code:code, redirect_uri:"http://rstat.emaf.ca/me"
     }, function(data){
       console.log(data);
       res.json(data);
-    })
+    });
   }else if (! req.session.uname){
     return res.redirect(redditAuthUrl);
   } else {
